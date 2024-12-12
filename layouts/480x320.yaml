@@ -7,6 +7,40 @@ font: !include
     icons_sm: 20
     icons_md: 26
     icons_lg: 34
+image:
+  - file: mdi:battery-10
+    id: batt_10
+    resize: 40x40
+  - file: mdi:battery-20
+    id: batt_20
+    resize: 40x40
+  - file: mdi:battery-30
+    id: batt_30
+    resize: 40x40
+  - file: mdi:battery-40
+    id: batt_40
+    resize: 40x40
+  - file: mdi:battery-50
+    id: batt_50
+    resize: 40x40
+  - file: mdi:battery-60
+    id: batt_60
+    resize: 40x40
+  - file: mdi:battery-70
+    id: batt_70
+    resize: 40x40
+  - file: mdi:battery-80
+    id: batt_80
+    resize: 40x40
+  - file: mdi:battery-90
+    id: batt_90
+    resize: 40x40
+  - file: mdi:battery
+    id: batt_full
+    resize: 40x40
+  - file: mdi:battery-outline
+    id: batt_empty
+    resize: 40x40
 
 .sizing:
   - &nav_widget_vars
@@ -68,6 +102,7 @@ lvgl:
         - script.execute: go_home
 
     - id: bedroom
+      skip: true  
       <<: *page_styles
       on_load:
         - lvgl.label.update:
@@ -168,16 +203,16 @@ lvgl:
                     file: widgets/buttons/text_buttons/stateless.yaml
                     vars:
                       uid: dim
-                      text: Dim Lights
+                      text: Svetlo obyvak
                       <<: *button_widget_vars
                   on_short_click:
                     - homeassistant.action:
-                        action: homeassistant.turn_on
-                        data: { entity_id: scene.living_room_lights_tv_watching }
+                        action: switch.turn_off
+                        data: { entity_id: switch.tasmota }
                   on_long_press:
                     - homeassistant.action:
-                        action: light.turn_on
-                        data: { entity_id: light.all_living_room_lights, brightness_pct: '100' }
+                        action: switch.toggle
+                        data: { entity_id: switch.tasmota }
 
               - button: # play / pause
                   <<: !include
@@ -277,6 +312,7 @@ lvgl:
                       <<: *button_widget_vars
 
     - id: lighting_2
+      skip: true 
       <<: *page_styles
       on_load:
         - lvgl.label.update:
@@ -334,6 +370,7 @@ lvgl:
                       <<: *button_widget_vars
 
     - id: lighting_3
+      skip: true 
       <<: *page_styles
       on_load:
         - lvgl.label.update:
@@ -373,6 +410,7 @@ lvgl:
                       <<: *button_widget_vars
 
     - id: printers
+      skip: true 
       <<: *page_styles
       on_load:
         - lvgl.label.update:
@@ -423,7 +461,42 @@ lvgl:
                       uid: printer_5
                       name: 5 - Dinno
                       <<: *printer_widget_vars
-
+    - id: energy 
+      <<: *page_styles
+      on_load:
+        - lvgl.label.update:
+            id: page_title
+            text: Energy
+      widgets:
+        - obj:
+            <<: *container_styles
+            layout:
+              <<: *button_layout
+            widgets:
+              # - animimg:
+              #     align: TOP_RIGHT
+              #     y: 41
+              #     x: -10
+              #     id: ani_battery_charging
+              #     src: [
+              #       batt_empty,
+              #       batt_10,
+              #       batt_20,
+              #       batt_30,
+              #       batt_40,
+              #       batt_50,
+              #       batt_60,
+              #       batt_70,
+              #       batt_80,
+              #       batt_90,
+              #       batt_full
+              #       ]
+              #     duration: 2200ms
+            - label:
+                  align: CENTER
+                  id: energy_battery_label
+                  text: 'Hello World!'
+      
 packages:
   # header
   header_sensors: !include { file: widgets/header/sensors.yaml }

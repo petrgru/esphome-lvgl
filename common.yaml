@@ -2,7 +2,7 @@ esphome:
   min_version: 2024.11.0
 
 logger:
-  level: INFO
+  level: DEBUG
 
 wifi:
   ssid: !secret wifi_ssid
@@ -15,6 +15,8 @@ ota:
   - platform: esphome
 
 api:
+  encryption:
+    key: "mocOMfV36AcFQutGzL8zFiKH/CjtBWSGaudWSZm8D/M="
 
 binary_sensor:
   - platform: status
@@ -35,7 +37,26 @@ sensor:
       - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
     unit_of_measurement: "%"
     entity_category: diagnostic
+  - platform: homeassistant
+    id: growatt_battery_soc
+    entity_id: sensor.growatt_battery_soc
+    internal: true
 
+  - id: growatt_battery_soc_percent
+    name: Growatt Battery SOC
+    platform: copy
+    source_id: growatt_battery_soc
+    filters:
+      - lambda: return x;
+    unit_of_measurement: "%"
+    entity_category: diagnostic
+    on_value:
+      then:
+        - lvgl.label.update: 
+            id: energy_battery_label
+            text:
+                format: "Battery SOC: %f %%"
+                args: [ 'id(growatt_battery_soc_percent).state' ]
 text_sensor:
   - platform: wifi_info
     ip_address:
